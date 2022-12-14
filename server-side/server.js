@@ -48,7 +48,7 @@ httpServer.listen(HTTP_PORT, () => {
 
 /*-------------------------------*/
 //Websocket stuff
-const { initServer, getWsServer } = require("./websocketServer");
+const { initServer } = require("./websocketServer");
 
 const socketServer = http.createServer();
 const wss = new ws.Server({ server: socketServer });
