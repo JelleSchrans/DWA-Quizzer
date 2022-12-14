@@ -14,7 +14,14 @@ const ws = require("ws");
 
 //Running the Express application
 const expressApp = express();
-const EXPRESS_PORT = 4000;
+const HTTP_PORT = 4000;
+
+/*-------------------------------*/
+
+//Http server stuff
+const httpServer = http.createServer(expressApp);
+
+/*-------------------------------*/
 
 //Using the body-parser module
 expressApp.use(bodyParser.json());
@@ -28,16 +35,29 @@ const sessionParser = session({
 expressApp.use(sessionParser);
 
 //Cors 
-app.use(cors({ origin: true, credentials: true,}));
-app.options('*', cors({ origin: true, credentials: true,}));
+expressApp.use(cors({ origin: true, credentials: true,}));
+expressApp.options('*', cors({ origin: true, credentials: true,}));
 
 //Using the routes for the application
 
 
-//Run Express app on port 4000
-expressApp.listen(EXPRESS_PORT, () => {
-    console.log(`Server is running on port ${EXPRESS_PORT}`);
-});
+//Run HTTP-server on port 4000
+httpServer.listen(HTTP_PORT, () => {
+    console.log(`HTTP server is running on port ${HTTP_PORT}`);
+})
+
+/*-------------------------------*/
+//Websocket stuff
+const { initServer, getWsServer } = require("./websocketServer");
+
+const socketServer = http.createServer();
+const wss = new ws.Server({ server: socketServer });
+
+wss.on('connection', (client, req) => {
+    client.session = req.session;
+})
+
+initServer(wss); //Passing the websocket server to the websocketServer.js file for further use
 
 /*-------------------------------*/
 
