@@ -14,7 +14,7 @@ const ws = require("ws");
 
 //Running the Express application
 const expressApp = express();
-const HTTP_PORT = 4000;
+const EXPRESS_PORT = 4000;
 
 /*-------------------------------*/
 
@@ -42,24 +42,27 @@ expressApp.options('*', cors({ origin: true, credentials: true,}));
 
 
 //Run HTTP-server on port 4000
-httpServer.listen(HTTP_PORT, () => {
-    console.log(`HTTP server is running on port ${HTTP_PORT}`);
+httpServer.listen(EXPRESS_PORT, () => {
+    console.log(`HTTP server is running on port ${EXPRESS_PORT}`);
 })
 
 /*-------------------------------*/
 //Websocket stuff
 const { initServer } = require("./websocketServer");
 
-const socketServer = http.createServer();
-const wss = new ws.Server({ server: socketServer });
+const wss = new ws.Server({ server: httpServer });
 
 wss.on('connection', (client, req) => {
     client.session = req.session;
-})
+    console.log('New client connected!');
+});
 
 initServer(wss); //Passing the websocket server to the websocketServer.js file for further use
 
 /*-------------------------------*/
+//Mongoose models
+const Quizrooms = require('./models/quizroom');
+const Teams = require('./models/teams');
 
 //Running the database connection
 const DB_HOST = '127.0.0.1:27017';
