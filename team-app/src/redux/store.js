@@ -1,7 +1,7 @@
 import * as Redux from 'redux';
 import thunk from 'redux-thunk';
 
-import mainReducer from './reducers';
+import { mainReducer } from './reducers';
 
 const logger = (store) => (next) => (action) => {
     console.log("ACTION:", action.type, action);

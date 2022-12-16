@@ -1,23 +1,26 @@
-let wsServer;
+let wsServer; // The websocket server
+let socketMethods = {}; // Object with methods for websockets
 
-function initServer(server) {
+socketMethods.initServer = function(server) {
   wsServer = server;
 }
 
-function getWsServer() {
-  return wsServer;
-}
-
-function broadCastMessage(message) {
+socketMethods.broadCastToAll = function(message) { //Send message to all connected clients
   wsServer.clients.forEach(client => {
-    if (client.readyState === ws.OPEN) {
-      client.send(message);
+    if (client.OPEN) {
+      let data = JSON.stringify(message);
+      client.send(data);
     }
   });
 }
 
-module.exports = {
-    initServer, 
-    getWsServer, 
-    broadCastMessage,
+socketMethods.broadCastToClient = function(wsClient, message) { //Send message to specific client (wsClient)
+   wsServer.clients.forEach(client => {
+    if(client.OPEN && client == wsClient){
+      let data = JSON.stringify(message);
+      client.send(data);
+    }
+   });
 }
+
+module.exports = socketMethods;

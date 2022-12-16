@@ -9,7 +9,7 @@ let initialTeamState = {
 function teamReducer(state = initialTeamState, action) {
     switch (action.type) {
         case 'ADD_TEAM':
-            return [...state, action.team];
+            return {...state, teamName: action.payload};
         case 'REMOVE_TEAM':
             return state.filter(team => team.id !== action.id);
         default:
