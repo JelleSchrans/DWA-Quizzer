@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 
-const Questions = require('./models/questions');
+require('./models/questions');
+const Questions = mongoose.model('Question');
 
 const DB_HOST = '127.0.0.1:27017';
 const DB_NAME = 'quizzerApp'
@@ -15,7 +16,7 @@ mongoose.connect(`mongodb://${DB_HOST}/${DB_NAME}`, { useNewUrlParser: true })
     console.log(err);
 })
 .then(() => {
-    console.log('Closing database connection');
+    console.log('Closing database connection...');
     db.close();
 })
 

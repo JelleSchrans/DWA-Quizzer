@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
+import './css/teams.css';
+
 import * as ReactRedux from 'react-redux';
 
 import { theStore } from './redux/store';

@@ -47,7 +47,7 @@ httpServer.listen(EXPRESS_PORT, () => {
 //Websocket stuff
 const { initServer, broadCastToClient } = require("./websocketServer");
 
-const wss = new ws.Server({ server: httpServer });
+const wss = new ws.Server({ server: httpServer }); // Creating the websocket server
 
 wss.on('connection', (ws, req) => {
     ws.session = req.session;
@@ -59,9 +59,11 @@ initServer(wss); //Passing the websocket server to the websocketServer.js file f
 
 /*------------ Mongoose -------------------*/ 
 //Mongoose models
-const Quizrooms = require('./models/quizroom');
-const Teams = require('./models/teams');
-const Questions = require('./models/questions');
+require('./models/quizroom'); 
+
+require('./models/teams');
+
+require('./models/questions');
 
 //Running the database connection
 const DB_HOST = '127.0.0.1:27017';

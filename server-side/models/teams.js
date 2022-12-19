@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //Define collection and schema for Teams
-let Teams = new Schema({
+let teamSchema = new Schema({
     roomID: {
         type: String,
         required: true
@@ -11,6 +11,12 @@ let Teams = new Schema({
         type: String,
         required: true
     },
+    score: {
+        type: Number,
+        default: 0,
+        required: true
+    },
 });
 
-module.exports = mongoose.model('Teams', Teams);
+const Teams = mongoose.model('Teams', teamSchema);
+module.exports = Teams.schema;

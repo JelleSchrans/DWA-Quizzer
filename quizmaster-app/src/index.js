@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
+import './css/quizmaster.css';
 import reportWebVitals from './reportWebVitals';
 
 import * as ReactRedux from 'react-redux';
