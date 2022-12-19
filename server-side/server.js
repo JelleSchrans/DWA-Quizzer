@@ -32,6 +32,13 @@ expressApp.use(cors({ origin: true, credentials: true,}));
 expressApp.options('*', cors({ origin: true, credentials: true,}));
 
 //Using the routes for the application
+const questionsRouter = require('./routes/questions.routes');
+const quizroomsRouter = require('./routes/quizrooms.routes');
+const teamsRouter = require('./routes/teams.routes');
+
+expressApp.use("/questions", questionsRouter);
+expressApp.use("/quizrooms", quizroomsRouter);
+expressApp.use("/teams", teamsRouter);
 
 /*----------- HTTP Server -------------------*/
 
