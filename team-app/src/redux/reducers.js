@@ -2,7 +2,7 @@ import * as Redux from 'redux';
 
 let initialTeamState = {
     id: 0,
-    name: '',
+    teamName: '',
     score: 0
 }
 
@@ -11,7 +11,7 @@ function teamReducer(state = initialTeamState, action) {
         case 'ADD_TEAM':
             return {...state, teamName: action.payload};
         case 'REMOVE_TEAM':
-            return state.filter(team => team.id !== action.id);
+            return "";
         default:
             return state;
     }

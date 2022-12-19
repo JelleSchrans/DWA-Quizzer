@@ -5,7 +5,7 @@ export function openSocket() {
         theSocket.close();
     }
     console.log("Opening socket...");
-    theSocket = new WebSocket("ws://localhost:3000");
+    theSocket = new WebSocket("ws://localhost:4000");
     return theSocket;
 }
 
