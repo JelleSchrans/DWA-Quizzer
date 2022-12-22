@@ -15,4 +15,13 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/:teamName", async (req, res) => {
+    try {
+        const team = await Teams.findOne({teamName: req.params.teamName});
+        res.send(team);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 module.exports = router;

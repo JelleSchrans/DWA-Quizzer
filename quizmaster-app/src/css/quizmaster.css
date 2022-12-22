@@ -8,6 +8,10 @@ body {
     flex-direction: column;
 }
 
+h1 {
+    text-align: center;
+}
+
 .btn {
     background-color: blue;
     border: none;
@@ -23,4 +27,44 @@ body {
 
 .btn:hover {
     background-color: lightblue;
+}
+
+#questions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 30px;
+}
+
+.questionButton {
+    background-color: blue;
+    height: 100%;
+    width: 100%;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.5s ease-out;
+}
+
+.questionButton:disabled {
+    background-color: grey;
+}
+
+.questionButton:hover {
+    background-color: lightblue;
+    transform: scale(1.05);
+    transition: 0.5s ease;
+}
+
+.teams {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
 }

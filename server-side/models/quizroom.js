@@ -4,32 +4,32 @@ const Schema = mongoose.Schema;
 
 //Define collection and schema for Quizrooms
 let quizroomSchema = new Schema({
-    roomName: {
-        type: String,
-        required: true
-    },
     roomCode: {
         type: String,
         required: true
     },
     teams: {
         type: [Teams],
-        required: true,
         validate: [teamsLimit, '{PATH} exceeds the limit of 6']   
     },
     currentQuestion: {
         type: String,
         required: true
     },
+    quizStarted: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    quizEnded: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
 });
 
 function teamsLimit(val) {
     return val.length <= 6;
-}
-
-quizroomSchema.methods.addTeam = function(team) {
-    this.teams.push(team);
-    return this.save();
 }
 
 const Rooms = mongoose.model('Quizrooms', quizroomSchema);

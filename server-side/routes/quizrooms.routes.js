@@ -16,4 +16,27 @@ router.get("/", async (req, res) => {
     }
 })
 
+router.get("/:roomCode", async (req, res) => {
+    try {
+        const quizroom = await Quizrooms.findOne({roomCode: req.params.roomCode});
+        res.send(quizroom);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+router.post("/newRoom", async (req, res) => {
+    try {
+        const newRoom = req.body;
+        req.session.roomCode = newRoom.roomCode;
+
+        const quizroom = Quizrooms.create(newRoom);
+        await quizroom.save();
+
+        res.send(quizroom);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 module.exports = router;

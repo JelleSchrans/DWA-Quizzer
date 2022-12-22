@@ -3,10 +3,6 @@ const Schema = mongoose.Schema;
 
 //Define collection and schema for Teams
 let teamSchema = new Schema({
-    roomID: {
-        type: String,
-        required: true
-    },
     teamName: {
         type: String,
         required: true
@@ -16,6 +12,10 @@ let teamSchema = new Schema({
         default: 0,
         required: true
     },
+    answer: {
+        type: String,
+        required: true        
+    }
 });
 
 const Teams = mongoose.model('Teams', teamSchema);

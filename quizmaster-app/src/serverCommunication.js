@@ -23,3 +23,7 @@ export function readMessage(newMessage){ // Read message sent from the server
         break;
     }
 }
+
+export async function createNewRoom(){
+    
+}
