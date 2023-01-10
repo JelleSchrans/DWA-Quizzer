@@ -17,13 +17,14 @@ export function createNewRoom(){
         headers: {
             'Content-Type': 'application/json'
         },
-        mode: 'no-cors',
+        mode: 'cors',
         credentials: "include"
-    }).then(response => checkFetchError(response))
+    }).then(response => response.json())
 }
 
 export function checkFetchError( response ) {
+    console.log("Response ok: ", response.ok);
     return response.ok
               ? response.json()
-              : Promise.reject("Unexpected response");
+              : Promise.reject("Error:", response.statusText);
 }

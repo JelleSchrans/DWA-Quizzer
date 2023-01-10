@@ -50,6 +50,8 @@ httpServer.on('upgrade', (request, webSocket, head) => {
           return;
       }
 
+      console.log("Session is parsed!", request.session.roomCode);
+
       wss.handleUpgrade(request, webSocket, head, ws => {
           wss.emit('connection', ws, request);
       });

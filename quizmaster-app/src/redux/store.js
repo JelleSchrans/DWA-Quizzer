@@ -1,6 +1,6 @@
 import * as Redux from 'redux';
 import thunk from 'redux-thunk';
-import { asyncGetQuestions } from './reducers';
+import { asyncGetQuestions, updateCurrentRoom } from './reducers';
 
 import mainReducer from './reducers';
 
@@ -18,6 +18,7 @@ const theStore = Redux.createStore(
 );
 
 theStore.dispatch(asyncGetQuestions());
+theStore.dispatch(updateCurrentRoom());
 
 export default theStore;
 

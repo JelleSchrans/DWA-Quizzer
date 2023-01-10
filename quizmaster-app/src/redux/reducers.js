@@ -15,7 +15,7 @@ function getQuestionsAction(questions){
 }
 
 export function asyncGetQuestions(){
-    return async (dispatch) => {
+    return dispatch => {
         fetch('http://localhost:4000/questions')
         .then(response => checkFetchError(response))
         .then(questions => dispatch(getQuestionsAction(questions)))
@@ -23,7 +23,7 @@ export function asyncGetQuestions(){
 }
 
 export function updateCurrentRoom(){
-    return async (dispatch) => {
+    return dispatch => {
         fetch(`http://localhost:4000/quizrooms/currentRoom`)
         .then(response => checkFetchError(response))
         .then(room => dispatch(setRoomAction(room)))

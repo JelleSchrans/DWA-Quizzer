@@ -14,9 +14,9 @@ socketMethods.broadCastToAll = function(message) { //Send message to all connect
   });
 }
 
-socketMethods.broadCastToClient = function(wsClient, message) { //Send message to specific client (wsClient)
+socketMethods.broadCastToClient = function(role, message) { //Send message to specific client (wsClient)
    wsServer.clients.forEach(client => {
-    if(client.OPEN && client == wsClient){
+    if(client.OPEN && client.role == role){
       let data = JSON.stringify(message);
       client.send(data);
     }

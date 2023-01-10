@@ -39,7 +39,7 @@ function App() {
     let ws = openSocket();
     ws.onopen = () => { console.log("Socket opened") }
     ws.onclose = () => { ws = openSocket() }
-    ws.onerror = (error) => { console.log("Socket error: ", error) }
+    ws.onerror = (error) => { ws = openSocket() }
     ws.onmessage = (message) => { readMessage(message.data) }
   }
 

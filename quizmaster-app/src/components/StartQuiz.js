@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import * as ReactRedux from "react-redux";
 
-import { setRoomAction } from "../redux/reducers";
+import { setRoomAction, updateCurrentRoom } from "../redux/reducers";
 import { createNewRoom } from "../serverCommunication";
 
 function StartQuizUI(props){
@@ -16,16 +16,16 @@ function StartQuizUI(props){
     )
 
     function handleButtonClick(){
-        createNewRoom().then((quizroom) => {
-          props.createRoom(quizroom);
-          props.onOpenSocket();
-        });
+        createNewRoom().then(room => {
+            props.doSetRoom(room);
+        })
+        props.onOpenSocket();
     }
 }
 
 function mapDispatchToProps(dispatch){
     return {
-        createRoom: (room) => dispatch(setRoomAction(room))
+        doSetRoom: (room) => dispatch(setRoomAction(room))
     }
 }
 

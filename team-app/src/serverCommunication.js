@@ -17,7 +17,7 @@ export function sendRequest(roomCode, teamName) {
         headers: {
             "Content-Type": "application/json"
         },
-        mode: "no-cors",
+        mode: "cors",
         credentials: "include"
     }).then(response => checkFetchError(response));
 }

@@ -26,24 +26,19 @@ router.get("/currentRoom", async (req, res) => {
     if (quizroom) {
         res.send(quizroom);
     } else {
-        res.send({ error: "No room found" });
+        res.status(404).send({ error: "No room found" });
     }
 });
 
 router.post("/newRoom", async (req, res) => {
-    try {
         const roomcode = (Math.random() + 1).toString(36).substring(7); // Generate a random room code;
         req.session.roomCode = roomcode;
+        req.session.role = "quizmaster";
 
         const quizroom = await new Quizroom({roomCode: roomcode})
         await quizroom.save();
 
-        console.log("New room: ", req.session.roomCode);
-
-        res.status(200).send(quizroom);
-    } catch (error) {
-        console.log(error);
-    }
+        res.status(200).send(quizroom);   
 })
 
 router.post("/:roomCode/teams/:teamName/request", async (req, res) => {
