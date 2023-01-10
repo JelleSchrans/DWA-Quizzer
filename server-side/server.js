@@ -2,11 +2,10 @@
 
 // Importing the required modules
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
-const mongoose = require('mongoose');
-const path = require('path');
+const bodyParser = require('body-parser');
 const session = require('express-session');
+const mongoose = require('mongoose');
 const http = require("http");
 const ws = require("ws");
 
@@ -16,6 +15,9 @@ const ws = require("ws");
 const expressApp = express();
 const EXPRESS_PORT = 4000;
 
+//Using the body-parser module
+expressApp.use(bodyParser.json());
+
 //Setting up the session
 const sessionParser = session({
   saveUninitialized: false,
@@ -24,13 +26,12 @@ const sessionParser = session({
 });
 expressApp.use(sessionParser);
 
-//Using the body-parser module
-expressApp.use(bodyParser.urlencoded({extended : true}));
-expressApp.use(bodyParser.json());
-
 //Cors 
-expressApp.use(cors({ origin: true, credentials: true,}));
-expressApp.options('*', cors({ origin: true, credentials: true,}));
+expressApp.use(cors({ origin: true, credentials: true}));
+expressApp.options('*', cors({ origin: true, credentials: true}));
+
+//Create the http server
+const httpServer = http.createServer(expressApp);
 
 //Using the routes for the application
 const questionsRouter = require('./routes/questions.routes');
@@ -41,33 +42,19 @@ expressApp.use("/quizrooms", quizroomsRouter);
 
 /*----------- HTTP Server -------------------*/
 
-//Create the http server
-const httpServer = http.createServer(expressApp);
+httpServer.on('upgrade', (request, webSocket, head) => {
+  sessionParser(request, {}, () => {
 
-httpServer.on("upgrade", (req, networkSocket, head) => {
-    sessionParser(req, {}, () => {
-      // The 'req' parameter contains the HTTP request that is for the upgrade
-      // request to the websocket protocol.
-      // We can refuse the upgrade request by returning from this function
-      // (and closing the networkconnection for this request)
-      // if (!req.session.roomCode) {
-      //   networkSocket.destroy();
-      //   return;
-      // }
-  
-      console.log(
-        "Session is parsed and we have a User! "
-      );
-  
-      //     // Everything is fine. We tell the websocket server to
-      //     // initiate a new websocket connection for this request
-      //     // and emit a new connection event passing in the
-      //     // newly created websocket when the setup is complete
-      wss.handleUpgrade(req, networkSocket, head, (newWebSocket) => {
-        wss.emit("connection", newWebSocket, req);
+      if (!request.session.roomCode) {
+          webSocket.destroy();
+          return;
+      }
+
+      wss.handleUpgrade(request, webSocket, head, ws => {
+          wss.emit('connection', ws, request);
       });
-    });
-});
+  })
+})
 
 /*------------ Websockets -------------------*/
 //Websocket stuff

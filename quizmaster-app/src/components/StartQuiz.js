@@ -16,8 +16,10 @@ function StartQuizUI(props){
     )
 
     function handleButtonClick(){
-        createNewRoom();
-        props.onOpenSocket();
+        createNewRoom().then((quizroom) => {
+          props.createRoom(quizroom);
+          props.onOpenSocket();
+        });
     }
 }
 

@@ -21,11 +21,12 @@ router.get("/", async (req, res) => {
 
 router.get("/currentRoom", async (req, res) => {
     console.log("Current room: ", req.session.roomCode)
-    try {
-        const quizroom = await Quizroom.findOne({roomCode: req.session.roomCode});
+    const quizroom = await Quizroom.findOne({roomCode: req.session.roomCode});
+
+    if (quizroom) {
         res.send(quizroom);
-    } catch (error) {
-        console.log(error);
+    } else {
+        res.send({ error: "No room found" });
     }
 });
 
@@ -49,20 +50,18 @@ router.post("/:roomCode/teams/:teamName/request", async (req, res) => {
     const roomcode = req.params.roomCode;
     const teamname = req.params.teamName;
 
-    console.log("Body", req.body);
+    const roomToRequest = await Quizroom.findOne({roomCode: roomcode});
 
-    try {
-        const roomToRequest = await Quizroom.findOne({roomCode: roomcode});
+    if(roomToRequest){
         const teamRequest = new Team({teamName: teamname});
 
         roomToRequest.teamRequests.push(teamRequest);
         await roomToRequest.save();
 
         res.send({ message: "Team request sent" });
-    } catch(error) {
-        console.log(error);
-        res.send({message: "Can't find this room"});
-    }
+    } else {
+        res.send({ message: "Can't find this room"});
+    }    
 });
 
 router.post("/teams/accept", async (req, res) => {
@@ -72,19 +71,23 @@ router.post("/teams/accept", async (req, res) => {
         const roomToJoin = await Quizroom.findOne({roomCode: req.session.roomCode});
 
         roomToJoin.teams.push(selectedTeam);
+        roomToJoin.teamRequests = roomToJoin.teamRequests.filter(team => team.teamName !== selectedTeam);
         await roomToJoin.save();
     } catch(error) {
-
+        console.log(error);
     }
 });
 
-router.delete("/teams/reject", (req, res) => {
+router.delete("/teams/reject", async (req, res) => {
     const selectedTeam = req.body.teamName;
 
     try {
+        const roomToJoin = await Quizroom.findOne({roomCode: req.session.roomCode});
 
+        roomToJoin.teamRequests = roomToJoin.teamRequests.filter(team => team.teamName !== selectedTeam);
+        await roomToJoin.save();
     } catch(error) {
-
+        console.log(error);
     }
 })
 

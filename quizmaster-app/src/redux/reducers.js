@@ -31,7 +31,7 @@ export function updateCurrentRoom(){
 }
 
 let initialQuizMasterState = {
-    roomCode: "",
+    currentRoom: null,
     questions: [],
     selectedQuestion: null
 }
