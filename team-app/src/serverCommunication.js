@@ -11,15 +11,16 @@ export function openSocket() {
     return theSocket;
 }
 
-export function readMessage(newMessage) {
-    let message = JSON.parse(newMessage);
+export function sendRequest(roomCode, teamName) {
+    return fetch(`http://localhost:4000/quizrooms/${roomCode}/teams/${teamName}/request`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        mode: "no-cors",
+    }).then(response => checkFetchError(response));
+}
 
-    switch (message.type) {
-        case "newClient":
-            console.log(message.data);
-            break;
-        default:
-            console.log("Unknown message received");
-            break;
-    }
+export function checkFetchError(response) {
+    return response.json() //? response.json() : Promise.reject("Unexpected response");
 }

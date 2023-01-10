@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './components/App';
+import { MainApp } from './components/App';
 import './css/quizmaster.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -11,7 +11,7 @@ import theStore from './redux/store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ReactRedux.Provider store={theStore}>
-    <App />
+    <MainApp />
   </ReactRedux.Provider>
 );
 

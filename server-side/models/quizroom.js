@@ -6,15 +6,23 @@ const Schema = mongoose.Schema;
 let quizroomSchema = new Schema({
     roomCode: {
         type: String,
-        required: true
+        required: true,
+        unique: true
+    },
+    teamRequests: {
+        type: [Teams],
+        required: true,
+        default: []
     },
     teams: {
         type: [Teams],
-        validate: [teamsLimit, '{PATH} exceeds the limit of 6']   
+        required: true,
+        validate: [teamsLimit, '{PATH} exceeds the limit of 6'],
+        default: []
     },
     currentQuestion: {
         type: String,
-        required: true
+        default: ""
     },
     quizStarted: {
         type: Boolean,

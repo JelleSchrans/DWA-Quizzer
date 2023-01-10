@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
+import * as ReactRedux from "react-redux";
 
 import Button from "./Button";
 
-function Teams(){
+function Teams(props){
+
+
     return(
         <div className="container">
-            <h1>Teams</h1>
+            <h1>Roomcode: </h1>
+
+            <Link to="/selectQuestion"><Button className="btn" content="Begin met de Quiz!" /></Link>
 
             <div className="teams">
                 <div className="incomingRequests">
@@ -16,9 +21,21 @@ function Teams(){
                 </div>
             </div>
 
-            <Link to="/selectQuestion"><Button className="btn" content="Begin met de Quiz!" /></Link>
+            <Button className="btn" content="Accepteer team"/>
+
+            <br /><br />
+
+            <Button className="btn" content="Weiger team"/>
+
+            <br />
         </div>
     )
 }
 
-export default Teams;
+function mapStateToProps(state){
+    return {
+        currentRoom: state.quizMaster.currentRoom
+    }
+}
+
+export const TeamRequests = ReactRedux.connect(mapStateToProps)(Teams)

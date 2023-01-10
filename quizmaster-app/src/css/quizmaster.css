@@ -52,8 +52,8 @@ h1 {
     transition: 0.5s ease-out;
 }
 
-.questionButton:disabled {
-    background-color: grey;
+.questionButton:disabled /* .btn:disabled */ {
+    background-color: lightgray;
 }
 
 .questionButton:hover {
@@ -63,6 +63,25 @@ h1 {
 }
 
 .teams {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+}
+
+#firstPlace {
+    font-size: x-large;
+}
+
+#secondPlace {
+    font-size: large;
+}
+
+#thirdPlace {
+    font-size: medium;
+}
+
+.runnerUps {
     display: flex;
     flex-direction: row;
     justify-content: space-around;

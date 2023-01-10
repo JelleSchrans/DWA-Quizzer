@@ -16,16 +16,17 @@ const ws = require("ws");
 const expressApp = express();
 const EXPRESS_PORT = 4000;
 
-//Using the body-parser module
-expressApp.use(bodyParser.json());
-
 //Setting up the session
 const sessionParser = session({
-    saveUninitialized: false,
-    resave: false,
-    secret: '3xpre$$-$3Cr3T',
- });
+  saveUninitialized: false,
+  secret: '$eCuRiTy',
+  resave: false
+});
 expressApp.use(sessionParser);
+
+//Using the body-parser module
+expressApp.use(bodyParser.urlencoded({extended : true}));
+expressApp.use(bodyParser.json());
 
 //Cors 
 expressApp.use(cors({ origin: true, credentials: true,}));
@@ -34,32 +35,48 @@ expressApp.options('*', cors({ origin: true, credentials: true,}));
 //Using the routes for the application
 const questionsRouter = require('./routes/questions.routes');
 const quizroomsRouter = require('./routes/quizrooms.routes');
-const teamsRouter = require('./routes/teams.routes');
 
 expressApp.use("/questions", questionsRouter);
 expressApp.use("/quizrooms", quizroomsRouter);
-expressApp.use("/teams", teamsRouter);
 
 /*----------- HTTP Server -------------------*/
 
 //Create the http server
 const httpServer = http.createServer(expressApp);
 
-//Run HTTP-server on port 4000
-httpServer.listen(EXPRESS_PORT, () => {
-    console.log(`HTTP server is running on port ${EXPRESS_PORT}`);
-})
+httpServer.on("upgrade", (req, networkSocket, head) => {
+    sessionParser(req, {}, () => {
+      // The 'req' parameter contains the HTTP request that is for the upgrade
+      // request to the websocket protocol.
+      // We can refuse the upgrade request by returning from this function
+      // (and closing the networkconnection for this request)
+      // if (!req.session.roomCode) {
+      //   networkSocket.destroy();
+      //   return;
+      // }
+  
+      console.log(
+        "Session is parsed and we have a User! "
+      );
+  
+      //     // Everything is fine. We tell the websocket server to
+      //     // initiate a new websocket connection for this request
+      //     // and emit a new connection event passing in the
+      //     // newly created websocket when the setup is complete
+      wss.handleUpgrade(req, networkSocket, head, (newWebSocket) => {
+        wss.emit("connection", newWebSocket, req);
+      });
+    });
+});
 
 /*------------ Websockets -------------------*/
 //Websocket stuff
 const { initServer, broadCastToClient } = require("./websocketServer");
 
-const wss = new ws.Server({ server: httpServer }); // Creating the websocket server
+const wss = new ws.Server({ noServer: true }); // Creating the websocket server
 
-wss.on('connection', (ws, req) => {
-    ws.session = req.session;
-
-    broadCastToClient(ws, {type: "newClient", data: "Connected to WS server"}); //Confirmation message that client is connected
+wss.on('connection', (socket, req) => {
+    socket.session = req.session;
 });
 
 initServer(wss); //Passing the websocket server to the websocketServer.js file for further use
@@ -71,6 +88,14 @@ require('./models/quizroom');
 require('./models/teams');
 
 require('./models/questions');
+
+
+/*------------ Running the server -------------------*/
+
+//Run HTTP-server on port 4000
+httpServer.listen(EXPRESS_PORT, () => {
+    console.log(`HTTP server is running on port ${EXPRESS_PORT}`);
+})
 
 //Running the database connection
 const DB_HOST = '127.0.0.1:27017';

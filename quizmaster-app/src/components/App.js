@@ -1,10 +1,15 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import * as ReactRedux from "react-redux";
 
-import StartQuiz from './StartQuiz';
-import Teams from './Teams';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { openSocket } from '../serverCommunication';
+
+import { StartQuiz } from './StartQuiz';
+import { TeamRequests } from './Teams';
 import { SelectQuestions } from './SelectQuestion';
 import { Question } from './Question';
 import Results from './Results';
+
+import { updateCurrentRoom } from "../redux/reducers";
 
 function App() {
 
@@ -12,10 +17,10 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/" render={() => {
-          return <StartQuiz />
+          return <StartQuiz onOpenSocket={onOpenSocket} />
         }}/>
         <Route path="/teamRequests" render={() => {
-          return <Teams />
+          return <TeamRequests />
         }}/>
         <Route exact path="/selectQuestion" render={() => {
           return <SelectQuestions />
@@ -29,6 +34,28 @@ function App() {
       </Switch>
     </Router>
   );
+
+  function onOpenSocket(){
+    let ws = openSocket();
+    ws.onopen = () => { console.log("Socket opened") }
+    ws.onclose = () => { ws = openSocket() }
+    ws.onerror = (error) => { console.log("Socket error: ", error) }
+    ws.onmessage = (message) => { readMessage(message.data) }
+  }
+
+  function readMessage(newMessage) {
+    let message = JSON.parse(newMessage);
+
+    switch (message.type) {
+        case "teamRequest":
+          console.log("New team request: ", message);
+          updateCurrentRoom();
+            break;
+        default:
+          console.log(message);
+            break;
+    }
+ }
 }
 
-export default App;
+export const MainApp = ReactRedux.connect()(App);

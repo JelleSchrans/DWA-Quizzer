@@ -9,14 +9,13 @@ function SelectQuestion(props){
         <div className='container'>
             <h1>Kies een vraag</h1>
             <p>Kies uit onderstaande vragen een volgende vraag voor de huidige ronde. 
-            Vragen die in deze ronde al aan de beurt geweest zijn kunnen niet gekozen worden</p>
+            Vragen die in deze ronde al aan de beurt geweest zijn kunnen niet nog een keer gekozen worden</p>
          <div id='questions'>
             {props.allQuestions.map((question, index) => {
                 return (
-                <Link to="/question">
-                <Button buttonKey={index} className="questionButton" handleClick={(evt) => { 
+                <Link to="/question" key={index}>
+                <Button className="questionButton" handleClick={(evt) => { 
                     props.setSelectedQuestion(question); 
-                    delete props.allQuestions[index];
                 }} 
                 content={
                     <div>

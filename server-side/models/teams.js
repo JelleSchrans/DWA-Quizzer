@@ -10,11 +10,10 @@ let teamSchema = new Schema({
     score: {
         type: Number,
         default: 0,
-        required: true
     },
     answer: {
         type: String,
-        required: true        
+        default: ""      
     }
 });
 
